@@ -6,8 +6,8 @@ import (
 	
 	"github.com/gin-gonic/gin"
 
-	"github.com/im-knots/go-api/config"
-	"github.com/im-knots/go-api/handlers"
+	"github.com/im-knots/go-api-sdk/config"
+	"github.com/im-knots/go-api-sdk/handlers"
 )
 
 // Define the Service interface globally.

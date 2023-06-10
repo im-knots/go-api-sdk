@@ -1,4 +1,4 @@
-module github.com/im-knots/go-api
+module github.com/im-knots/go-api-sdk
 
 go 1.20
 

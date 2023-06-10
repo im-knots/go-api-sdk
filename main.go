@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/im-knots/go-api/config"
-	"github.com/im-knots/go-api/server"
+	"github.com/im-knots/go-api-sdk/config"
+	"github.com/im-knots/go-api-sdk/server"
 )
 
 type ExampleService struct{}
