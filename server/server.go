@@ -3,29 +3,46 @@ package server
 import (
 	"fmt"
 	"log"
-	"net/http"
-	"github.com/gorilla/mux"
+	
+	"github.com/gin-gonic/gin"
 
 	"github.com/im-knots/go-api/config"
 	"github.com/im-knots/go-api/handlers"
 )
 
+// Define the Service interface globally.
+type Service interface {
+	RegisterRoutes(*gin.Engine)
+}
+
 type Server struct {
-	Config *config.Config
+	Config  *config.Config
+	Services []Service
 }
 
 func NewServer(cfg *config.Config) *Server {
 	return &Server{
-		Config: cfg,
+		Config:  cfg,
+		Services: make([]Service, 0),
 	}
 }
 
-func (s *Server) Start() {
-	router := mux.NewRouter()
+func (s *Server) RegisterService(service Service) {
+	s.Services = append(s.Services, service)
+}
 
-	router.HandleFunc("/health", handlers.HealthCheckHandler).Methods("GET")
-	router.Handle("/metrics", handlers.PrometheusHandler())
+func (s *Server) Start() {
+	r := gin.New()
+
+	r.Use(gin.Logger())
+
+	r.GET("/health", handlers.HealthCheckHandler)
+	r.GET("/metrics", gin.WrapH(handlers.PrometheusHandler()))
+
+	for _, service := range s.Services {
+		service.RegisterRoutes(r)
+	}
 
 	log.Printf("Starting server on port %s", s.Config.Server.Port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", s.Config.Server.Port), router))
+	log.Fatal(r.Run(fmt.Sprintf(":%s", s.Config.Server.Port)))
 }
