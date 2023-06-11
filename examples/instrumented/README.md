@@ -10,8 +10,8 @@ Start an OTLP Exporter. Here, we'll start Jaeger all in one:
 $ docker run -d --name jaeger \
     -e COLLECTOR_OTLP_ENABLED=true \
     -p 4317:4317 \
-	-p 16686:16686
-	jaegertracing/all-in-one
+    -p 16686:16686 \
+  jaegertracing/all-in-one
 ```
 
 Start the example API
