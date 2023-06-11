@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/im-knots/go-api-sdk/handlers"
@@ -25,7 +28,9 @@ func (m *InstrumentedService) RegisterRoutes(r *gin.Engine) {
 }
 
 func (m *InstrumentedService) RootHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "Hello World!"})
+	workTime := rand.Intn(500)
+	time.Sleep(time.Duration(workTime) * time.Millisecond)
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Worked %d ms", workTime)})
 }
 
 func main() {
