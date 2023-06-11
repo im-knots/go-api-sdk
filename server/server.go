@@ -46,9 +46,10 @@ func (s *Server) RegisterService(service Service) {
 }
 
 func (s *Server) Start() {
-	cleanup := instrumentation.InitTracer(s.Exporter, s.Name)
-	defer cleanup(context.Background())
-
+	if s.Exporter != "" {
+		cleanup := instrumentation.InitTracer(s.Exporter, s.Name)
+		defer cleanup(context.Background())
+	}
 	for _, service := range s.Services {
 		service.RegisterRoutes(s.Engine)
 	}
