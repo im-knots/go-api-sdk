@@ -7,7 +7,7 @@ Note the main.go included in this repository is an example implementation of the
 ## Features
 
 * Basic setup for a web server using the Gin framework
-* Flexible configuration loading from a YAML file
+* Flexible configuration loading from a YAML file, environment variables, or both.
 * Health check endpoint at /health
 * Prometheus metrics endpoint at /metrics
 * Prometheus middleware for tracking request count and latency with success and error response differentiation
@@ -91,11 +91,17 @@ server.RegisterService(myService)
 
 
 ### Configuration
-The SDK loads the service configuration from a YAML file, the name and location of which are supplied when creating the config object in your code. The configuration loading mechanism is highly flexible, and can accommodate arbitrary fields as per the requirements of your service.
+The SDK supports flexible configuration loading from a YAML file or environment variables, or a combination of both. 
 
-The loaded configuration is unmarshalled into a structure that you define in your service. This structure should include fields that correspond to the keys in your configuration file. For each field, you can add a struct tag `mapstructure:"key"` where `"key"` is the corresponding key in your configuration file. This tag is used to map the configuration data to the correct fields in your struct.
+#### YAML Configuration File
 
-Here is an example of how to define a configuration struct:
+You can define the configuration in a YAML file. For instance, a default.yaml file may look like this:
+
+```yaml
+port: "8080"
+```
+
+You load this configuration file and unmarshal it into your configuration struct. Here is an example of how to define a configuration struct:
 
 ```go
 type MyConfig struct {
@@ -118,17 +124,29 @@ if err != nil {
 }
 ```
 
-In this example, the port field in `MyConfig` corresponds to the port key in the default.yaml file, which might look like this:
-
-```yaml
-port: "8080"
-```
-
 Once the configuration is loaded and unmarshalled, you can access the configuration data via your struct. For example, you can access the port number as `myConfig.Port`.
 
-Remember to customize the default.yaml file as per your service's requirements and locate it in the same directory where the application is started.
+#### Environment Variables
+You can also use environment variables for configuration. If you have a nested structure in your YAML file like:
 
+```yaml
+db:
+  host: localhost
+  port: 5432
+```
+You can specify it in an environment variable by separating the levels with underscores:
 
+```shell
+export DB_HOST=localhost
+export DB_PORT=5432
+```
+
+Note: The SDK automatically uses environment variables that match the keys in your configuration struct, overriding the values from the configuration file if both are present.
+
+#### Combination of Both
+You can even use a combination of both configuration file and environment variables. If a setting is specified in both places, the environment variable will take precedence. This is useful for handling sensitive data like passwords, which can be kept out of the configuration file and instead supplied as environment variables.
+
+Remember to customize the configuration as per your service's requirements. Also note that the YAML configuration file is optional. If it doesn't exist, the application can rely entirely on environment variables.
 
 
 # Contributors
