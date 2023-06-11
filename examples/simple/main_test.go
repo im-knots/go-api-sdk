@@ -60,16 +60,16 @@ func TestHealthRoute(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, "OK", w.Body.String())
+	assert.Equal(t, w.Body.String(), "OK")
 }
 
-/*
 func TestCustomMetrics(t *testing.T) {
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/metrics", nil)
+	req, _ := http.NewRequest("GET", "/api/v1/crud", nil)
 	r.ServeHTTP(w, req)
-
 	assert.Equal(t, 200, w.Code)
-	assert.Contains(t, "my_custom_counter", w.Body.String())
+	req, _ = http.NewRequest("GET", "/metrics", nil)
+	r.ServeHTTP(w, req)
+	assert.Equal(t, 200, w.Code)
+	assert.Contains(t, w.Body.String(), "my_custom_counter")
 }
-*/
