@@ -42,11 +42,6 @@ var (
 	)
 )
 
-type CustomMetrics interface {
-	Describe(ch chan<- *prometheus.Desc)
-	Collect(ch chan<- prometheus.Metric)
-}
-
 func init() {
 	// Metrics have to be registered to be exposed:
 	prometheus.MustRegister(httpRequestsTotal, httpRequestDuration, httpRequestSize, httpResponseSize)
