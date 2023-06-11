@@ -60,7 +60,7 @@ func TestHealthRoute(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, w.Body.String(), "OK")
+	assert.Equal(t, "OK", w.Body.String())
 }
 
 func TestCustomMetrics(t *testing.T) {

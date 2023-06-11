@@ -2,7 +2,7 @@
   
 [![Tests](https://github.com/im-knots/go-api-sdk/actions/workflows/tests.yml/badge.svg)](https://github.com/im-knots/go-api-sdk/actions/)
 
-A Software Development Kit (SDK) that assists in the creation of REST APIs using the Go language and the Gin framework. This SDK is designed with Kubernetes and Prometheus in mind, providing out-of-the-box support for a /health and /metrics endpoint, which are useful in a Kubernetes environment for readiness and liveness probes, and for observability with Prometheus, respectively.
+A Software Development Kit (SDK) that assists in the creation of REST APIs using the Go language and the Gin framework. This SDK is designed with Kubernetes and Prometheus in mind, providing out-of-the-box support for a /health and /metrics endpoint, which are useful in a Kubernetes environment for readiness and liveness probes, and for observability with Prometheus, respectively.  
 
 ## Features
 
