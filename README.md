@@ -39,5 +39,11 @@ The server started with this SDK will have two endpoints available by default:
     /health: Returns OK if the server is running.
     /metrics: Returns metrics for Prometheus.
 
-### Versioning
-This go module using github actions to bump the module version on PR merges into main
+## Versioning
+This go module uses github actions to bump the module version on PR merges into main
+
+### Bumping
+
+Manual Bumping: Any commit message that includes #major, #minor, #patch, or #none will trigger the respective version bump. If two or more are present, the highest-ranking one will take precedence. If #none is contained in the merge commit message, it will skip bumping regardless DEFAULT_BUMP.
+
+Automatic Bumping: If no #major, #minor or #patch tag is contained in the merge commit message, it will bump whichever DEFAULT_BUMP is set to (which is minor by default). Disable this by setting DEFAULT_BUMP to none.
