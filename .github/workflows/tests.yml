@@ -18,3 +18,5 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Run Go Report Card
+        uses: creekorful/goreportcard-action@v1.0
