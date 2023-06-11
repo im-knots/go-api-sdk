@@ -5,10 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/im-knots/go-api-sdk/config"
-	"github.com/im-knots/go-api-sdk/server"
 	"github.com/im-knots/go-api-sdk/handlers"
+	"github.com/im-knots/go-api-sdk/server"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 var myCustomCounter = prometheus.NewCounterVec(
