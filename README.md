@@ -20,7 +20,7 @@ These instructions will help you understand how to use this SDK for creating you
 
 2. To use this SDK in your application, import it with:
     ```
-    import "github.com/im-knots/go-api"
+    import "github.com/im-knots/go-api-sdk
     ```
 
 3. Use go mod to download the Go dependencies
