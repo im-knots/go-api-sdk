@@ -5,13 +5,26 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/im-knots/go-api-sdk/config"
 	"github.com/im-knots/go-api-sdk/server"
+	"github.com/im-knots/go-api-sdk/handlers"
+)
+
+var myCustomCounter = prometheus.NewCounterVec(
+	prometheus.CounterOpts{
+		Name: "my_custom_counter",
+		Help: "This is my custom counter",
+	},
+	[]string{"label1", "label2"},
 )
 
 type ExampleService struct{}
 
 func (m *ExampleService) RegisterRoutes(r *gin.Engine) {
+	// Register Prometheus middleware
+	r.Use(handlers.PrometheusMiddleware())
+
 	r.GET("/api/v1/", m.RootHandler)
 	r.GET("/api/v1/report", m.ReportHandler)
 	r.GET("/api/v1/crud", m.CrudHandler)
@@ -28,6 +41,9 @@ func (m *ExampleService) ReportHandler(c *gin.Context) {
 }
 
 func (m *ExampleService) CrudHandler(c *gin.Context) {
+	// Increment the custom metric
+	myCustomCounter.WithLabelValues("label1_value", "label2_value").Inc()
+
 	c.JSON(http.StatusOK, gin.H{"status": "OK"})
 }
 
@@ -48,10 +64,10 @@ type MyConfig struct {
 }
 
 func main() {
-	// initialize your config
+	// Initialize your config
 	cfg := config.NewConfig("default.yaml")
 
-	// define your config struct
+	// Define your config struct
 	var myConfig MyConfig
 	err := cfg.Unmarshal(&myConfig)
 	if err != nil {
@@ -60,7 +76,9 @@ func main() {
 
 	s := server.NewServer(myConfig.Port)
 
-	// registering service
+	// Register custom metrics
+	handlers.RegisterCustomMetrics(myCustomCounter)
+
 	exampleService := &ExampleService{}
 	s.RegisterService(exampleService)
 

@@ -89,6 +89,47 @@ myService := &MyService{}
 server.RegisterService(myService)
 ```
 
+### Adding Custom Metrics
+
+The SDK provides a Prometheus middleware that tracks request count and latency with success and error response differentiation. If you want to add your own custom metrics to this middleware, you can do so by following these steps:
+
+1. Import the necessary Prometheus packages in your code:
+
+    ```go
+    import (
+        "github.com/prometheus/client_golang/prometheus"
+        "github.com/prometheus/client_golang/prometheus/promhttp"
+    )
+    ```
+
+2. Create your custom Prometheus metrics using the prometheus.NewXXX functions provided by the Prometheus client library. For example, to create a counter metric:
+
+    ```go
+    var myCustomCounter = prometheus.NewCounterVec(
+        prometheus.CounterOpts{
+            Name: "my_custom_counter",
+            Help: "This is my custom counter",
+        },
+        []string{"label1", "label2"},
+    )
+    ```
+
+3. Register your custom metrics using the prometheus.MustRegister function. You can register multiple metrics at once:
+
+    ```go
+    prometheus.MustRegister(myCustomCounter, myOtherMetric, ...)
+    ```
+
+4. In your custom service's handler method, increment the custom metric as needed:
+
+    ```go
+    myCustomCounter.WithLabelValues("label1_value", "label2_value").Inc()
+    ```
+
+    You can place this code inside the handler method where it makes sense in relation to your application logic.
+
+That's it! Your custom metrics will now be tracked by the Prometheus middleware in addition to the default metrics provided by the SDK.
+
 
 ### Configuration
 The SDK supports flexible configuration loading from a YAML file or environment variables, or a combination of both. 

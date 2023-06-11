@@ -23,12 +23,30 @@ var (
 		},
 		[]string{"method", "endpoint", "status"},
 	)
+	httpRequestSize = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "http_request_size_bytes",
+			Help:    "Size of HTTP requests",
+			Buckets: prometheus.ExponentialBuckets(1024, 2, 10), // 1KB, 2KB, 4KB, ... 512KB
+		},
+		[]string{"method", "endpoint"},
+	)
 )
 
+type CustomMetrics interface {
+	Describe(ch chan<- *prometheus.Desc)
+	Collect(ch chan<- prometheus.Metric)
+}
 
 func init() {
 	// Metrics have to be registered to be exposed:
-	prometheus.MustRegister(httpRequestsTotal, httpRequestDuration)
+	prometheus.MustRegister(httpRequestsTotal, httpRequestDuration, httpRequestSize)
+}
+
+func RegisterCustomMetrics(metrics ...prometheus.Collector) {
+	for _, metric := range metrics {
+		prometheus.MustRegister(metric)
+	}
 }
 
 func PrometheusMiddleware() gin.HandlerFunc {
@@ -53,9 +71,12 @@ func PrometheusMiddleware() gin.HandlerFunc {
 			status = "error"
 		}
 		httpRequestsTotal.WithLabelValues(c.Request.Method, c.Request.URL.Path, status).Inc()
+
+		// Record request size
+		requestSize := float64(c.Request.ContentLength)
+		httpRequestSize.WithLabelValues(c.Request.Method, c.Request.URL.Path).Observe(requestSize)
 	}
 }
-
 
 func PrometheusHandler() http.Handler {
 	return promhttp.Handler()
