@@ -33,7 +33,7 @@ func InitTracer(collectorURL string, serviceName string) func(context.Context) e
 		),
 	)
 	if err != nil {
-		log.Printf("Could not set resources: ", err)
+		log.Printf("Could not set resources: %s", err)
 	}
 
 	otel.SetTracerProvider(
