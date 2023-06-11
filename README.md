@@ -106,7 +106,7 @@ type MyConfig struct {
 
 And here is how to load the configuration file and unmarshal it into your struct:
 
-```
+```go
 // initialize your config
 cfg := config.NewConfig("default.yaml")
 
