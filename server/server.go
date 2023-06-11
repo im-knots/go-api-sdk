@@ -25,13 +25,20 @@ type Server struct {
 }
 
 func NewServer(port string) *Server {
-	return &Server{
+	s := &Server{
 		Port:     port,
 		Engine:   gin.New(),
 		Services: make([]Service, 0),
 		Exporter: "",
 		Name:     "",
 	}
+
+	s.Engine.Use(gin.Logger())
+	s.Engine.Use(otelgin.Middleware(s.Name))
+	s.Engine.GET("/health", handlers.HealthCheckHandler)
+	s.Engine.GET("/metrics", gin.WrapH(handlers.PrometheusHandler()))
+
+	return s
 }
 
 func (s *Server) RegisterService(service Service) {
@@ -39,14 +46,8 @@ func (s *Server) RegisterService(service Service) {
 }
 
 func (s *Server) Start() {
-
 	cleanup := instrumentation.InitTracer(s.Exporter, s.Name)
 	defer cleanup(context.Background())
-
-	s.Engine.Use(gin.Logger())
-	s.Engine.Use(otelgin.Middleware(s.Name))
-	s.Engine.GET("/health", handlers.HealthCheckHandler)
-	s.Engine.GET("/metrics", gin.WrapH(handlers.PrometheusHandler()))
 
 	for _, service := range s.Services {
 		service.RegisterRoutes(s.Engine)
