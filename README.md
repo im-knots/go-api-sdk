@@ -13,12 +13,17 @@ These instructions will help you understand how to use this SDK for creating you
 
 ### Installation
 
-1. To use this SDK in your application, import it with:
+1. This is currently a private repo. You will need to tell go to not check checksums with GOPRIVATE
+    ```
+    go env -w GOPRIVATE=github.com/im-knots/*
+    ```
+
+2. To use this SDK in your application, import it with:
     ```
     import "github.com/im-knots/go-api"
     ```
 
-2. Use go mod to download the Go dependencies
+3. Use go mod to download the Go dependencies
     ```
     go mod tidy
     ```
