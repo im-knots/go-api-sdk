@@ -39,3 +39,5 @@ The server started with this SDK will have two endpoints available by default:
     /health: Returns OK if the server is running.
     /metrics: Returns metrics for Prometheus.
 
+### Versioning
+This go module using github actions to bump the module version on PR merges into main
