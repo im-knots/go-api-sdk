@@ -50,3 +50,5 @@ Automatic Bumping: If no #major, #minor or #patch tag is contained in the merge 
 
 # Contributors
 im-knots
+
+this is a test of gh actions
