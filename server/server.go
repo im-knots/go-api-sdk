@@ -35,6 +35,7 @@ func (s *Server) Start() {
 	r := gin.New()
 
 	r.Use(gin.Logger())
+	r.Use(handlers.PrometheusMiddleware()) // Apply the middleware
 
 	r.GET("/health", handlers.HealthCheckHandler)
 	r.GET("/metrics", gin.WrapH(handlers.PrometheusHandler()))
