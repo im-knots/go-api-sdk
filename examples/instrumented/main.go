@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -13,6 +14,7 @@ import (
 	"github.com/im-knots/go-api-sdk/server"
 	"github.com/urfave/cli/v2"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/otel"
 )
 
 type InstrumentedService struct {
@@ -27,9 +29,16 @@ func (m *InstrumentedService) RegisterRoutes(r *gin.Engine) {
 	r.Use(otelgin.Middleware(m.Name))
 }
 
+func someJob(ctx context.Context, workTime int) {
+	tp := otel.Tracer("some-job")
+	_, span := tp.Start(ctx, fmt.Sprintf("some-job-%d", workTime))
+	defer span.End()
+	time.Sleep(time.Duration(workTime) * time.Millisecond)
+}
+
 func (m *InstrumentedService) RootHandler(c *gin.Context) {
 	workTime := rand.Intn(500)
-	time.Sleep(time.Duration(workTime) * time.Millisecond)
+	someJob(c.Request.Context(), workTime)
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Worked %d ms", workTime)})
 }
 
