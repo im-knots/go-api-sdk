@@ -19,13 +19,27 @@ func (m *ExampleService) ExampleHandler(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "Hello World!"})
 }
 
+type MyConfig struct {
+	Port string `mapstructure:"port"`
+	// Add additional fields as needed
+}
+
 func main() {
-	cfg, err := config.Load("default.yaml")
+	// initialize your config
+	cfg := config.NewConfig("default.yaml")
+
+	// define your config struct
+	var myConfig MyConfig
+	err := cfg.Unmarshal(&myConfig)
 	if err != nil {
-		log.Fatalf("Failed to load config: %s", err)
+		log.Fatalf("Unable to unmarshal config, %v", err)
 	}
 
-	srv := server.NewServer(cfg)
-	srv.RegisterService(&ExampleService{})
-	srv.Start()
+	s := server.NewServer(myConfig.Port)
+
+	// registering service
+	exampleService := &ExampleService{}
+	s.RegisterService(exampleService)
+
+	s.Start()
 }

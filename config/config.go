@@ -1,26 +1,27 @@
 package config
 
 import (
+	"log"
+
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Server struct {
-		Port string
-	}
+	viper *viper.Viper
 }
 
-func Load(configFile string) (*Config, error) {
-	viper.SetConfigFile(configFile)
+func NewConfig(configPath string) *Config {
+	v := viper.New()
+	v.SetConfigFile(configPath)
+	v.AutomaticEnv()
 
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+	if err := v.ReadInConfig(); err != nil {
+		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	var cfg Config
-	if err := viper.Unmarshal(&cfg); err != nil {
-		return nil, err
-	}
+	return &Config{viper: v}
+}
 
-	return &cfg, nil
+func (c *Config) Unmarshal(output interface{}) error {
+	return c.viper.Unmarshal(output)
 }
