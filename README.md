@@ -10,7 +10,7 @@ Note the main.go included in this repository is an example implementation of the
 * Flexible configuration loading from a YAML file, environment variables, or both.
 * Health check endpoint at /health
 * Prometheus metrics endpoint at /metrics
-* Prometheus middleware for tracking request count and latency with success and error response differentiation
+* Prometheus middleware for tracking request count, latency, and request/response sizes differentiated by HTTP response code
 * Ability to add custom metrics to the Prometheus middleware for more granular monitoring and observability
 * An example service with its route registered to demonstrate the usage
 
