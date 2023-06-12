@@ -12,6 +12,6 @@ RUN go build -o /build/simple examples/simple/main.go
 RUN go build -o /build/instrumented examples/instrumented/main.go
 
 
-FROM gcr.io/distroless/static-debian11
-COPY --from=build /build/simple /simple
-COPY --from=build /build/instrumented /simple
+FROM gcr.io/distroless/base
+COPY --from=builder /build/simple /bin/simple
+COPY --from=builder /build/instrumented /bin/instrumented
