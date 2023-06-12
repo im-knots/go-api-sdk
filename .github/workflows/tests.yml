@@ -13,11 +13,7 @@ jobs:
       - name: Run go mod tidy
         run: go mod tidy
       - name: Run Tests
-<<<<<<< HEAD
         run: go test ./... -coverprofile=coverage.txt -covermode=atomic
-=======
-        run: go test ./... -cover
->>>>>>> ee681e6 (fixed CI git conflict)
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -25,3 +21,5 @@ jobs:
           file: ./coverage.txt
       - name: Run Go Report Card
         uses: creekorful/goreportcard-action@v1.0
+          file: ./coverage.txt
+
