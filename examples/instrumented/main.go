@@ -37,7 +37,7 @@ func someJob(ctx context.Context, workTime int) {
 }
 
 func (m *InstrumentedService) RootHandler(c *gin.Context) {
-	workTime := rand.Intn(500)
+	workTime := rand.Intn(100)
 	someJob(c.Request.Context(), workTime)
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Worked %d ms", workTime)})
 }
@@ -67,7 +67,7 @@ func main() {
 					instrumentedService := &InstrumentedService{
 						Name: "Instrumented Service",
 					}
-					s.Name = "Instrumented Service"
+					s.Name = "Instrumented Server"
 					s.Exporter = c.String("exporter")
 					s.RegisterService(instrumentedService)
 					s.Start()
