@@ -45,7 +45,8 @@ These instructions will help you understand how to use this SDK for creating you
 4. Assert all tests are passing
     ```
     $ go test ./...
-    ```
+    ```  
+
 ## Usage
 
 This SDK is not a standalone application, but a toolkit to facilitate the development of REST APIs. The provided main.go is an example of how to use the SDK and should be modified as per the needs of your project.
