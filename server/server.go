@@ -33,6 +33,7 @@ func NewServer(port string) *Server {
 		Name:     "",
 	}
 
+<<<<<<< HEAD
 	s.Engine.Use(gin.Logger())
 	s.Engine.Use(otelgin.Middleware(s.Name))
 	s.Engine.GET("/health", handlers.HealthCheckHandler)
@@ -41,15 +42,29 @@ func NewServer(port string) *Server {
 	return s
 }
 
+=======
+>>>>>>> 18af7e5 (feat(#6): add support for instrumentation)
 func (s *Server) RegisterService(service Service) {
 	s.Services = append(s.Services, service)
 }
 
 func (s *Server) Start() {
+<<<<<<< HEAD
 	if s.Exporter != "" {
 		cleanup := instrumentation.InitTracer(s.Exporter, s.Name)
 		defer cleanup(context.Background())
 	}
+=======
+
+	cleanup := instrumentation.InitTracer(s.Exporter, s.Name)
+	defer cleanup(context.Background())
+
+	s.Engine.Use(gin.Logger())
+	s.Engine.Use(otelgin.Middleware(s.Name))
+	s.Engine.GET("/health", handlers.HealthCheckHandler)
+	s.Engine.GET("/metrics", gin.WrapH(handlers.PrometheusHandler()))
+
+>>>>>>> 18af7e5 (feat(#6): add support for instrumentation)
 	for _, service := range s.Services {
 		service.RegisterRoutes(s.Engine)
 	}
