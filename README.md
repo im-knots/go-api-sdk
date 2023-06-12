@@ -28,20 +28,24 @@ These instructions will help you understand how to use this SDK for creating you
 ### Installation
 
 1. This is currently a private repo. You will need to tell go to not check checksums with GOPRIVATE
-    ```
-    go env -w GOPRIVATE=github.com/im-knots/*
+    ```bash
+    $ go env -w GOPRIVATE=github.com/im-knots/*
     ```
 
 2. To use this SDK in your application, import it with:
-    ```
+    ```go
     import "github.com/im-knots/go-api-sdk
     ```
 
 3. Use go mod to download the Go dependencies
-    ```
-    go mod tidy
+    ```bash
+    $ go mod tidy
     ```
 
+4. Assert all tests are passing
+    ```
+    $ go test ./...
+    ```
 ## Usage
 
 This SDK is not a standalone application, but a toolkit to facilitate the development of REST APIs. The provided main.go is an example of how to use the SDK and should be modified as per the needs of your project.
