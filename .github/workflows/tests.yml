@@ -19,3 +19,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
+      - name: Run Go Report Card
+        uses: creekorful/goreportcard-action@v1.0
+          file: ./coverage.txt
+
